@@ -31,9 +31,9 @@
 |           SOURCE -> DESTINATION          | (SEQ NUMBER, ACK NUMBER) |    RECEIVE WINDOWS SIZE   |
 ----------------------------------------------------------------------------------------------------
 | 130.245.145.12:43498 -> 128.208.2.198:80 | (705669103, 1921750144) |             3             |
-| 130.245.145.12:80 -> 128.208.2.198:43498 | (1921750144, 705669127) |             3             |
+| 128.208.2.198:80 -> 130.245.145.12:43498 | (1921750144, 705669127) |             3             |
 ----------------------------------------------------------------------------------------------------
-| 128.208.2.198:43498 -> 130.245.145.12:80 | (705669127, 1921750144) |             3             |
+| 130.245.145.12:43498 -> 128.208.2.198:80 | (705669127, 1921750144) |             3             |
 | 128.208.2.198:80 -> 130.245.145.12:43498 | (1921750144, 705670575) |             3             |
 ----------------------------------------------------------------------------------------------------
 ------------------------------------------------------------
@@ -49,9 +49,9 @@
 |           SOURCE -> DESTINATION          | (SEQ NUMBER, ACK NUMBER) |    RECEIVE WINDOWS SIZE   |
 ----------------------------------------------------------------------------------------------------
 | 130.245.145.12:43500 -> 128.208.2.198:80 | (3636173852, 2335809728) |             3             |
-| 130.245.145.12:80 -> 128.208.2.198:43500 | (2335809728, 3636173876) |             3             |
+| 128.208.2.198:80 -> 130.245.145.12:43500 | (2335809728, 3636173876) |             3             |
 ----------------------------------------------------------------------------------------------------
-| 128.208.2.198:43500 -> 130.245.145.12:80 | (3636173876, 2335809728) |             3             |
+| 130.245.145.12:43500 -> 128.208.2.198:80 | (3636173876, 2335809728) |             3             |
 | 128.208.2.198:80 -> 130.245.145.12:43500 | (2335809728, 3636175324) |             3             |
 ----------------------------------------------------------------------------------------------------
 ------------------------------------------------------------
@@ -67,17 +67,18 @@
 |           SOURCE -> DESTINATION          | (SEQ NUMBER, ACK NUMBER) |    RECEIVE WINDOWS SIZE   |
 ----------------------------------------------------------------------------------------------------
 | 130.245.145.12:43502 -> 128.208.2.198:80 | (2558634630, 3429921723) |             3             |
-| 130.245.145.12:80 -> 128.208.2.198:43502 | (3429921723, 2558634654) |             3             |
+| 128.208.2.198:80 -> 130.245.145.12:43502 | (3429921723, 2558634654) |             3             |
 ----------------------------------------------------------------------------------------------------
-| 128.208.2.198:43502 -> 130.245.145.12:80 | (2558634654, 3429921723) |             3             |
+| 130.245.145.12:43502 -> 128.208.2.198:80 | (2558634654, 3429921723) |             3             |
 | 128.208.2.198:80 -> 130.245.145.12:43502 | (3429921723, 2558636102) |             3             |
 ----------------------------------------------------------------------------------------------------
 ------------------------------------------------------------
 |TRIPLE DUPLICATE ACKS| TIMEOUTS |    FIRST 3 CWND SIZE   |
 ------------------------------------------------------------
-|          0          |    0    |       20, 43, 44       |
+|          0          |    0     |       20, 43, 44       |
 ------------------------------------------------------------
 ```
+
 
 
 ## Explanation
@@ -93,7 +94,6 @@ a. To get the first three congestion windows, I first calculated the RTT for eac
 The rate that congestion window grows is due to TCP slow start. The congestion window doubles per RTT until it hits the slow start threshold then it will start increasingly linearly. This can be shown in our third flow which the congestion window changes from 20 -> 43 -> 44 (doubles, then linear).
 
 b. To get the triple duplicate acknowledgments and timeouts, I first loop through each TCP Flow to get the sequence numbers and acknowledgment numbers of each packet in each flow after the three-way handshake. Then I use the Python Counter which is part of the Collections to count the number of times a sequence number (saved it to duplicate_seq_check) or acknowledgment number (saved it to triple_dup_ack) appears from the sender to receiver and vice versa. Then I found the intersection (the alikes) of both of the array and saved it to a variable, intersection. Then I loop through each element in the intersection and check if there are packets where the first duplicate acknowledgment is after the retransmited packet count and I save that occurrance to a variable, pkt_out_order. Finally, to the number of triple duplicate acknowledgment, I take the length of the intersection subtract the pkt_out_order. To get the number of timeouts, I take the length of the triple duplicate knowledgments (when the number of acknowledgments is greater than 3) subtract the number of triple duplicate acknowledgments.
-
 
 ## Credits
 https://jon.oberheide.org/blog/2008/10/15/dpkt-tutorial-2-parsing-a-pcap-file/
