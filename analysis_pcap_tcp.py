@@ -74,10 +74,10 @@ def getTransactionsAndThroughput(file_name, tcp_flows):
                     if len(first_two_transactions[2 * i]) == 0: 
                         first_two_transactions[2 * i].append(f'| {sender}:{sport} -> {receiver}:{dport} | ({tcp.seq}, {tcp.ack}) |             {tcp.win}             |')
                     elif len(first_two_transactions[2 * i]) == 1:
-                        first_two_transactions[2 * i].append(f'| {receiver}:{sport} -> {sender}:{dport} | ({tcp.seq}, {tcp.ack}) |             {tcp.win}             |')
+                        first_two_transactions[2 * i].append(f'| {sender}:{sport} -> {receiver}:{dport} | ({tcp.seq}, {tcp.ack}) |             {tcp.win}             |')
                 elif tcp_flow[0] == dport and tcp_flow[2] == sport:
                     if len(first_two_transactions[(2 * i) + 1]) == 0:
-                        first_two_transactions[(2 * i) + 1].append(f'| {sender}:{sport} -> {receiver}:{dport} | ({tcp.seq}, {tcp.ack}) |             {tcp.win}             |')
+                        first_two_transactions[(2 * i) + 1].append(f'| {receiver}:{sport} -> {sender}:{dport} | ({tcp.seq}, {tcp.ack}) |             {tcp.win}             |')
                     elif len(first_two_transactions[(2 * i) + 1]) == 1:
                         first_two_transactions[(2 * i) + 1].append(f'| {receiver}:{sport} -> {sender}:{dport} | ({tcp.seq}, {tcp.ack}) |             {tcp.win}             |')
 
